@@ -7,7 +7,8 @@ import { userContext } from '../userContext';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-import axios from 'axios';
+
+import {logInRequest} from './../dataProvider'
 
 
 const schema = yup.object({
@@ -111,24 +112,23 @@ class LogIn extends Component {
     makeNewAccount() {
         this.setState({ newAccount: true });
     }
+
     submitLogin(data, setUser) {
 
 
         let { userName, password } = data
         //assume login
 
-        axios.post('http://localhost:8000/api/users/signin', {
-            username: userName,
-            password: password,
-        })
-            .then(response => {
+
+        const success = (response => {
             setUser(userName, password, false);
             this.setState({ logedIn: true })
         })
-            .catch(function (error) {
-                console.log(error);
-            });
 
+        const postData = () => { logInRequest(userName, password,success) }
+
+        postData()
+       
     }
 }
 export default LogIn;

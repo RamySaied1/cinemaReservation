@@ -8,6 +8,9 @@ import * as yup from 'yup';
 
 import axios from 'axios';
 
+import { signUpRequest } from './../dataProvider'
+
+
 
 const schema = yup.object({
     firstName: yup.string().required(),
@@ -155,33 +158,15 @@ class Register extends Component {
         //const form = event.currentTarget;
 
         let {firstName,lastName,userName,password,email,date}=values
-        //assume login
 
-
-
-
-        const st=this.setState({ logedIn: true })
-        const st2 = setUser(userName, password, false);
-
-
-
-        axios.post('http://localhost:8000/api/users/signup', {
-            username: userName,
-            lastname: lastName,
-            firstname: firstName,
-            password: password,
-            email:email,
-            birthdate:date,
+        const success = (response => {
+            setUser(userName, password, false);
+            this.setState({ logedIn: true })
         })
-            .then(function (response) {
-                console.log(response);
-                st()
-                st2()
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        //assume login
+        const postData = () => { signUpRequest(userName, lastName, firstName, password, email, date, success) }
 
+        postData()
 
     }
 

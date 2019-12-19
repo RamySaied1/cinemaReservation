@@ -3,7 +3,8 @@ import MovieCard from './MovieCard'
 
 import { userContext } from '../userContext';
 
-import { Toast } from 'react-bootstrap'
+
+import { getAllMoviesRequest } from './../dataProvider'
 
 
 
@@ -15,7 +16,16 @@ class MovieList extends Component {
         movies: [],
     }
     componentDidMount() {
-      const movies= [
+
+     const success = (response) =>
+     {
+         console.log(response.data)
+     }
+
+    const getMovies = () => { getAllMoviesRequest(success) }
+
+    let movies = getMovies()
+       movies= [
           {
               "path": "joker.jpg",
               'name': 'Joker',
