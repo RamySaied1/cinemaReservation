@@ -32,9 +32,16 @@ class MovieList extends Component {
                             }   
                             {
                             movies.map(movie =>
-                                        <div className="col-3">
-                                        <MovieCard path={'joker.jpg'} name={movie["name"]} genre={movie["genre"]} length={movie["length"]} screenings={movie["screenings"]} screen={movie["screen"]}/>
-                                        </div>
+                                    <div className="col-3">
+                                        <MovieCard path={'joker.jpg'}
+                                            name={movie["name"]}
+                                            id={movie["_id"]}
+                                            genre={movie["genre"]}
+                                            length={movie["length"]}
+                                            screenings={movie["screenings"]}
+                                            screen={movie["screen"]}
+                                            admin={user.admin} />
+                                    </div>
                                         )
                             }
                             {

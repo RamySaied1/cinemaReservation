@@ -44,6 +44,16 @@ function getAllMoviesRequest( success) {
             console.log(error);
         });
 
+}
+
+function getScreen(screenId,success) {
+    console.log(url + "screens/"+screenId)
+    axios.get(url + "screens/"+screenId)
+        .then(success)
+        .catch(function (error) {
+            console.log(error);
+        });
+
 
 
 }
@@ -80,4 +90,4 @@ function addScreening(movieId, screenTime,success) {
 }
 
 
-export { logInRequest, signUpRequest, getAllMoviesRequest, addMovieRequest, addScreening };
+export { logInRequest, signUpRequest, getAllMoviesRequest, addMovieRequest, addScreening, getScreen };

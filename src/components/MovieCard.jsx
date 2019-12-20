@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import { Card, Button, NavDropdown,Form,Col} from 'react-bootstrap';
 import {  Redirect,Link } from 'react-router-dom';
 
-import DateTimePicker from 'react-datetime-picker'
-
 import { addScreening } from './../dataProvider'
 
 import { Formik } from 'formik';
@@ -92,7 +90,7 @@ class MovieCard extends Component {
             screnningList =
                 this.props.screenings.map(time =>
 
-                    <Link to={'/screen/' + this.props.screen + "/" + time} replace>
+                <Link to={'/screen/' + this.props.screen + "/" + this.props.id + "/" + time._id} replace>
                         <NavDropdown.Item as="a"> {time.screengingtime}</NavDropdown.Item>
                     </Link>
                 )

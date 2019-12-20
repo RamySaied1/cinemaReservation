@@ -63,7 +63,7 @@ class App extends React.Component {
               <Route exact path="/movies">
               <Main/>
               </Route>
-              <Route exact path="/screen/:id/:time" component={Graph}/>
+              <Route exact path="/screen/:screenId/:movieId/:screenTimeId" component={Graph}/>
               <Route exact path="/register">
                 <Register />
               </Route>

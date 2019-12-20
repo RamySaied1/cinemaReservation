@@ -1,59 +1,69 @@
 import React, { Component } from "react";
 import { useParams } from 'react-router-dom';
 
+import {getScreen} from '../dataProvider.js';
+
 export class GraphicalRepresentation extends Component {
 
-    index = 1; // global variable
-    // create arrays columns and rows
-    AllSeats = [];
+    index = 1;
 
-    /* Sockets */
-    //----- max number of rows and columns of screen-------//
-    rows = 15; // socket1 from db
-    cols = 15;  // socket2 from db
-    //------------socket 3 from db---(users seats)---------//
-    reservedSeats = [{row : 1,col : 1}, {row : 1,col : 5},{row : 4,col : 4} ];
+    state={
+        AllSeats: [],
+        reservedSeats: [],
+        rows: 15, 
+        cols: 15, 
+        Myseats: []
 
+    }
+    makeSeats= () =>
+    {
+        // create arrays columns and rows
+        let AllSeats = this.state.AllSeats
 
-    //------ creating our matrix (grid of seats) ------//
-    constructor(props) {
+        /* Sockets */
+        //----- max number of rows and columns of screen-------//
+        let rows = this.state.rows
+        let cols = this.state.cols
+        //------------socket 3 from db---(users seats)---------//
+        let reservedSeats = this.state.reservedSeats//[{ row: 1, col: 1 }, { row: 1, col: 5 }, { row: 4, col: 4 }];
 
-        super(props);
-        //--------------1.intializing our Array--------------//
-
-        let { id, time } = props.match.params;
-        console.log("location",id,time)
-        for( let i = 0 ;i<this.rows;i++){
-            this.AllSeats.push( new  Array(this.cols).fill('btn-primary'));
+        for (let i = 0; i < rows; i++) {
+            AllSeats.push(new Array(cols).fill('btn-primary'));
         }
 
 
         //--------------2.setting our reserved seats-------------//
-        for(let i = 0; i<this.reservedSeats.length; i++){
-            let resrvedRow = this.reservedSeats[i].row
-            let resrvedCol = this.reservedSeats[i].col
+        for (let i = 0; i < reservedSeats.length; i++) {
+            let resrvedRow = reservedSeats[i].row
+            let resrvedCol = reservedSeats[i].col
             console.log(resrvedRow)
 
             console.log(resrvedCol)
-            this.AllSeats[resrvedRow-1][resrvedCol-1] ='btn-danger';
+            AllSeats[resrvedRow - 1][resrvedCol - 1] = 'btn-danger';
 
-            console.log(this.AllSeats)
+            console.log(AllSeats)
         }
 
-        this.state = {
-            AllSeats : this.AllSeats,
-            // reserved seats recieved from db
-            reservedSeats : this.reservedSeats,
-            Myseats : []
-        }
-
+        this.setState(
+            {
+                AllSeats: AllSeats,
+                // reserved seats recieved from db
+                reservedSeats: reservedSeats,
+                rows: rows, // socket1 from db
+                cols: cols,  // socket2 from db
+            }
+        )
+    
     }
     // when user clicks a button we take his col and row info and reserve it in database
     Reserve(e, colIndex, RowIndex) {
 
     //1.---------------Check Clicked seat validation----------------//
         this.index = 1;
-        
+
+        let AllSeats= this.state.AllSeats;
+
+        let Myseats = this.state.Myseats    ;    
         //1.1---------check if reserved before-------//
         if(this.state.reservedSeats.find(seat => (seat.row === RowIndex && seat.col === colIndex))){
             alert('It is reserved select anothe seact')
@@ -63,16 +73,16 @@ export class GraphicalRepresentation extends Component {
 
         //1.2---------check if seat exists in my reservation----if yes change color to primary 
         //--------------------and delete element from reservation--------------------//
-        if(  this.state.Myseats.find(seat => (seat.row === RowIndex && seat.col === colIndex))){
+        if(  Myseats.find(seat => (seat.row === RowIndex && seat.col === colIndex))){
             console.log('alreaady exists so change color to primary');
-            this.AllSeats[RowIndex-1][colIndex-1] = 'btn-primary';
+            AllSeats[RowIndex-1][colIndex-1] = 'btn-primary';
             //----Note when you delete an object do this vars can not do the job :D-----//
-            let indexOfSeat = this.state.Myseats.indexOf(this.state.Myseats.find(seat =>
+            let indexOfSeat = Myseats.indexOf(Myseats.find(seat =>
                  (seat.row === RowIndex && seat.col === colIndex)));
 
-            this.state.Myseats.splice(indexOfSeat,1);
+            Myseats.splice(indexOfSeat,1);
             this.setState({
-                AllSeats : this.AllSeats
+                AllSeats : AllSeats
             });
             return true;
         } else {
@@ -80,30 +90,26 @@ export class GraphicalRepresentation extends Component {
 
 
 
-            this.state.Myseats.push({col : colIndex, row : RowIndex});
-            this.AllSeats[RowIndex-1][colIndex-1] = 'btn-dark';
+            Myseats.push({col : colIndex, row : RowIndex});
+            AllSeats[RowIndex-1][colIndex-1] = 'btn-dark';
 
             //--------Allow max 5 to be booked---------//
             //----We remove the first added element-------//
-            if(this.state.Myseats.length > 5 ){
-               let last = this.state.Myseats.splice(0,1);
-                console.log('last', last);
-                this.AllSeats[last[0].row-1][last[0].col-1] = 'btn-primary';
-                this.setState({
-                    AllSeats : this.AllSeats
-                });
-                console.log(this.state)
-                return true;
-            }
+ 
             this.setState({
-                AllSeats : this.AllSeats,
-                Myseats : this.state.Myseats
+                AllSeats : AllSeats,
+                Myseats : Myseats
             });
             console.log(colIndex, RowIndex)
             console.log('MySeats', this.state.Myseats)
             return true;
         }
 
+    }
+
+    componentDidMount ()
+    {
+        this.getScreenSize()
     }
 
     //-----------TODO---------//
@@ -118,12 +124,7 @@ export class GraphicalRepresentation extends Component {
             <div className='container mt-5'>
                 <div className='row'>
                     <div className='col-md-6'>
-                        <h4 className='badge badge-info p-2 col-md-4'>Max seats: {5 - this.state.Myseats.length}</h4>
-                    </div>
-                    <div className='col-md-3 mb-2'>
-                    <select className='form-control'>
-                        <option value='1'>date</option>
-                    </select>
+                        <h4 className='badge badge-info p-2 col-md-4'>Selected seats: {this.state.Myseats.length}</h4>
                     </div>
 
                 </div>
@@ -159,6 +160,29 @@ export class GraphicalRepresentation extends Component {
                 </div>
             </div>
         );
+    }
+
+    getScreenSize = ()=>
+    {
+        let { screenId, movieId, screenTimeId } =this.props.match.params;
+
+        console.log(screenId, movieId, screenTimeId)
+
+        const Success = (response) =>
+        {
+            console.log(response.data[0])
+            this.setState(
+                {
+                    rows:response.data[0].rows,
+                    cols: response.data[0].columns,
+
+                })
+            this.makeSeats()
+        }
+        getScreen(screenId, Success)
+
+
+
     }
 }
 
