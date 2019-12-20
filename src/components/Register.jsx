@@ -6,7 +6,6 @@ import { userContext } from '../userContext';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-import axios from 'axios';
 
 import { signUpRequest } from './../dataProvider'
 

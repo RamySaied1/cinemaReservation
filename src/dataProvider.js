@@ -21,7 +21,7 @@ function logInRequest(userName, password,success)
 
 function signUpRequest(userName, lastName, firstName, password, email, date,success) {
     console.log()
-    axios.post(url + "users/signin", {
+    axios.post(url + "users/signup", {
         username: userName,
         lastname: lastName,
         firstname: firstName,
@@ -48,5 +48,36 @@ function getAllMoviesRequest( success) {
 
 }
 
+function addMovieRequest(name,genre,screen,length,success) {
+    console.log(url + "movies/")
+    axios.post(url + "movies/", {
+        name: name,
+        genre: genre,
+        screen: screen,
+        length: length,
+    })
+        .then(success)
+        .catch(function (error) {
+            console.log(error);
+        });
 
-export { logInRequest, signUpRequest, getAllMoviesRequest };
+
+
+}
+
+function addScreening(movieId, screenTime,success) {
+    console.log(url + "movies/screenings/" + movieId, screenTime)
+    axios.put(url + "movies/screenings/" + movieId, {
+        screengingtime: screenTime,
+    })
+        .then(success)
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
+
+}
+
+
+export { logInRequest, signUpRequest, getAllMoviesRequest, addMovieRequest, addScreening };

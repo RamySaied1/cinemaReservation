@@ -3,9 +3,7 @@ import LogIn from './components/LogIn'
 import Register from './components/Register'
 
 
-import MovieList from './components/MovieList'
-
-import Screen from './components/Screen'
+import Main from './components/Main'
 
 import Navigation from './components/Navigation'
 
@@ -38,8 +36,8 @@ class App extends React.Component {
   }
 
   // Add a logout method
-  setUser(name,password,logedin,admin) {
-    this.setState({ user: { name: name, password: password, logedin:logedin,admin:admin} });
+  setUser(name,password,admin) {
+    this.setState({ user: { name: name, password: password,admin:admin} });
     console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
   }
 
@@ -49,6 +47,7 @@ class App extends React.Component {
       user: this.state.user,
       setUser: this.setUser
     }
+  
     return (
       // Pass user state as value to context.Provider so it can be consumed by context.Consumer
       <userContext.Provider value={value}>
@@ -62,7 +61,7 @@ class App extends React.Component {
                 <LogIn />
               </Route>
               <Route exact path="/movies">
-                <MovieList />
+              <Main/>
               </Route>
               <Route exact path="/screen/:id/:time" component={Graph}/>
               <Route exact path="/register">

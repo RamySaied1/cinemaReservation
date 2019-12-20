@@ -4,7 +4,6 @@ import MovieCard from './MovieCard'
 import { userContext } from '../userContext';
 
 
-import { getAllMoviesRequest } from './../dataProvider'
 
 
 
@@ -12,78 +11,36 @@ import { getAllMoviesRequest } from './../dataProvider'
 
 class MovieList extends Component {
 
-    state = {
-        movies: [],
-    }
-    componentDidMount() {
+ 
 
-     const success = (response) =>
-     {
-         console.log(response.data)
-     }
-
-    const getMovies = () => { getAllMoviesRequest(success) }
-
-    let movies = getMovies()
-       movies= [
-          {
-              "path": "joker.jpg",
-              'name': 'Joker',
-              'genre': "+18",
-              'screen': 1,
-              'times': [1, 2, 3]
-            },
-          {
-              "path": "joker.jpg",
-              'name': 'Joker',
-              'genre': "+18",
-              'screen': 1,
-              'times': [1, 2, 3]          },
-          {
-              "path": "joker.jpg",
-              'name': 'Joker',
-              'genre': "+18",
-              'screen': 1,
-              'times': [1, 2, 3]
-          },
-          {
-              "path": "joker.jpg",
-              'name': 'Joker',
-              'genre': "+18",
-              'screen': 1,
-              'times': [1, 2, 3]
-          },
-          {
-              "path": "joker.jpg",
-              'name': 'Joker',
-              'genre': "+18",
-              'screen': 1,
-              'times':[1,2,3]
-          },
-        ];
-    
-        this.setState({
-            movies: movies})
-    }
     render() {
-        const movies=this.state.movies;
+        const movies=this.props.movies;
+
+        console.log("movies",movies)
         
         return (
             <userContext.Consumer>
                 {({ user, setUser }) => {
+                    if (typeof  movies ==="undefined")
+                    {
+                        return <h1>No movies</h1>
+                    }
                     return (
-            <div className="row" >
-                 {
-                    console.log(user["name"])
-                 }   
-            {
-                movies.map(movie =>
-                    <div className="col-3">
-                                        <MovieCard path={movie["path"]} name={movie["name"]} genre={movie["genre"]} times={movie["times"]} screen={movie["screen"]}/>
-                    </div>
-                    )
-            }
-            </div>
+                            <div className="row" >
+                            {
+                            console.log(user["name"])
+                            }   
+                            {
+                            movies.map(movie =>
+                                        <div className="col-3">
+                                        <MovieCard path={'joker.jpg'} name={movie["name"]} genre={movie["genre"]} length={movie["length"]} screenings={movie["screenings"]} screen={movie["screen"]}/>
+                                        </div>
+                                        )
+                            }
+                            {
+                                
+                            }
+                            </div>
         );}}
         </userContext.Consumer>
         );
